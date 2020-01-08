@@ -4,3 +4,6 @@ token.pickle
 
 # service state
 cutoff
+
+# venv
+.venv

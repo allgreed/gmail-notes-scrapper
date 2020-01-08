@@ -63,7 +63,7 @@ def main():
 
         print(argh)
 
-    #print("New cutoff %s" % latest)
+    print("New cutoff %s" % latest)
     with open('cutoff', 'w') as f:
         f.write(latest)
         f.write('\n')
