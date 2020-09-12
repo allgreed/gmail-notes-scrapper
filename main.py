@@ -4,13 +4,9 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-# If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 def main():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -54,7 +50,7 @@ def main():
 
         r = service.users().messages().get(userId="me", id=a['id']).execute()
         import base64
-        content = r['payload']['body']['data'] 
+        content = r["payload"]["body"]["data"] 
         ble = base64.urlsafe_b64decode(content.encode('ascii')).decode('utf-8')
 
         import re
@@ -65,11 +61,13 @@ def main():
 
     print("New cutoff %s" % latest)
     with open('cutoff', 'w') as f:
-        f.write(latest)
-        f.write('\n')
+        f.write("{}\n".format(latest))
+    with open('cutoff.bak', 'w') as f:
+        f.write("{}\n".format(cutoff))
 
-# TODO: Transfer to a propper project on desktop
+# TODO: make sure there are no secrets in git repo
 # TODO: Put under git
+# TODO: nixify
 # TODO: refactor
 # TODO: Update cutoff point with journaling after going through the whole list
 # TODO: Refactor as a module
