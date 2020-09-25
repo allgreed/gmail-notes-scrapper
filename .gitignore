@@ -5,6 +5,3 @@ token.pickle
 # service state
 cutoff
 cutoff.bak
-
-# venv
-.venv

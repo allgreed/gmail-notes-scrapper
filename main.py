@@ -59,21 +59,18 @@ def main():
 
         print(argh)
 
-    print("New cutoff %s" % latest)
     with open('cutoff', 'w') as f:
         f.write("{}\n".format(latest))
     with open('cutoff.bak', 'w') as f:
         f.write("{}\n".format(cutoff))
 
-# TODO: make sure there are no secrets in git repo
-# TODO: Put under git
-# TODO: nixify
-# TODO: refactor
-# TODO: Update cutoff point with journaling after going through the whole list
+# TODO: unfuck
 # TODO: Refactor as a module
-# TODO: Save processed notes
-# TODO: Document usage - how to obtain secrets, etc.
-# TODO: Post on Github
+
+# TODO: Update cutoff point with journaling after going through the whole list
+# TODO: Don't 'move' to next note util the output is flushed to stdout
+
+# TODO: Document usage - how to obtain secrets, etc. <- is this needed?
 
 if __name__ == '__main__':
     main()
