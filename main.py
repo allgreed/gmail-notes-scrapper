@@ -5,6 +5,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+DEFAULT_NOTES_WHEN_MISSING_CUTOFF = 30
 
 def main():
     creds = None
@@ -19,8 +20,12 @@ def main():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+            try:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', SCOPES)
+            except FileNotFoundError:
+                print("Go to https://developers.google.com/gmail/api/quickstart/python and generate credentials.json")
+                exit(1)
             creds = flow.run_local_server()
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
@@ -34,11 +39,11 @@ def main():
     m = results['messages']
 
     latest, cutoff = None, None
-    with open('cutoff') as f:
-        ghh = f.readlines()
-        try:
-            cutoff = ghh[0].rstrip()
-        except IndexError:
+    try:
+        with open('cutoff') as f:
+            ghh = f.readlines()
+        cutoff = ghh[0].rstrip()
+    except (IndexError, FileNotFoundError):
             pass
 
     for i, a in enumerate(m):
@@ -46,6 +51,10 @@ def main():
             latest = a['id']
             
         if a['id'] == cutoff:
+            break
+
+        # handle missing cutoff
+        if i == DEFAULT_NOTES_WHEN_MISSING_CUTOFF and cutoff is None:
             break
 
         r = service.users().messages().get(userId="me", id=a['id']).execute()
