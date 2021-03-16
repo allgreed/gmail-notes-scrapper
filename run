@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+FILE=/tmp/$(date +%s)-gmail-notes
+python main.py | tee $FILE && vim $FILE

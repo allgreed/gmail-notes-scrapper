@@ -5,7 +5,7 @@
 .PHONY: run 
 
 run: setup ## run the app
-	python main.py
+	./run
 
 # Plumbing
 # ###############
