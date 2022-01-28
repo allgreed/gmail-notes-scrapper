@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 FILE=/tmp/$(date +%s)-gmail-notes
-python main.py | tee $FILE && vi $FILE
+python main.py > $FILE
+nvim $FILE
+cat $FILE
