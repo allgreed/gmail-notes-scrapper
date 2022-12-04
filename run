@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 FILE=/tmp/$(date +%s)-gmail-notes
-python main.py > $FILE
-nvim $FILE
+python main.py > $FILE 
+cat $FILE | grep -v  > /tmp/fujens
+mv /tmp/fujens $FILE
+nvim $FILE 
 cat $FILE
