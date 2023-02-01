@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 FILE=~/notes
 TMPFILE=$(mktemp)
-python main.py > $FILE 
-cat $FILE | grep -v  > $TMPFILE
-cat $TMPFILE >> $FILE
+SECONDTMPFILE=$(mktemp)
+python main.py > $TMPFILE
+cat $TMPFILE | grep -v  > $SECONDTMPFILE
+cat $SECONDTMPFILE >> $FILE
 nvim $FILE 
 cat $FILE
