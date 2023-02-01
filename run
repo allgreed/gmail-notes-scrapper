@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
-FILE=/tmp/$(date +%s)-gmail-notes
+FILE=~/notes
+TMPFILE=$(mktemp)
 python main.py > $FILE 
-cat $FILE | grep -v  > /tmp/fujens
-mv /tmp/fujens $FILE
+cat $FILE | grep -v  > $TMPFILE
+cat $TMPFILE >> $FILE
 nvim $FILE 
 cat $FILE
