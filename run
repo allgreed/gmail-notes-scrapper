@@ -6,4 +6,3 @@ python main.py > $TMPFILE
 cat $TMPFILE | grep -v  > $SECONDTMPFILE
 cat $SECONDTMPFILE >> $FILE
 nvim $FILE 
-cat $FILE
