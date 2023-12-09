@@ -74,6 +74,7 @@ def main():
         argh = fuj.rstrip()
 
         print(argh)
+    print("+1")
 
     with open('cutoff', 'w') as f:
         f.write("{}\n".format(latest))
