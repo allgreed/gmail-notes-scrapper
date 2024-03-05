@@ -75,7 +75,7 @@ def main():
 
         print(argh)
     print("+1")
-    print("cd ~/Desktop/ogar-metric-exporter; nix-shell --command "make report"")
+    print('cd ~/Desktop/ogar-metric-exporter; nix-shell --command "make report"')
 
     with open('cutoff', 'w') as f:
         f.write("{}\n".format(latest))
