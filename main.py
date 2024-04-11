@@ -76,6 +76,7 @@ def main():
         print(argh)
     print("+1")
     print('cd ~/Desktop/ogar-metric-exporter; nix-shell --command "make report"')
+    # TODO: actually just run the systemd service?
 
     with open('cutoff', 'w') as f:
         f.write("{}\n".format(latest))
