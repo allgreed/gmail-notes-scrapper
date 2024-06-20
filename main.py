@@ -1,8 +1,4 @@
 import pickle
-import errno
-import pathlib
-import sys
-import datetime
 import os
 
 from googleapiclient.discovery import build
@@ -82,20 +78,6 @@ def main():
         f.write("{}\n".format(latest))
     with open('cutoff.bak', 'w') as f:
         f.write("{}\n".format(cutoff))
-
-    last_path = pathlib.Path("/var/state/gmail-scrapper/last")
-
-    try:
-        try:
-            os.makedirs(last_path)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-
-        with open(last_path / "time", 'w') as f:
-            f.write(str(int(datetime.datetime.utcnow().timestamp())))
-    except (NotADirectoryError, FileNotFoundError, PermissionError) as e:
-        print(f"Could not save last time to {last_path / 'time'} due to {str(e)}", file=sys.stderr)
 
 # TODO: unfuck
 # TODO: Refactor as a module
