@@ -1,13 +1,11 @@
 let
-  nixpkgs = builtins.fetchGit {
-    name = "nixos-unstable-2020-05-9";
-    url = "https://github.com/nixos/nixpkgs-channels/";
+  pkgs = import (builtins.fetchGit {
+    url = "https://github.com/nixos/nixpkgs/";
     ref = "refs/heads/nixos-unstable";
-    rev = "46f975f81e0f71ba0d2b2bb8fe4006a9aa4c6c5c";
-    # obtain via `git ls-remote https://github.com/nixos/nixpkgs-channels nixos-unstable`
-  };
-  pkgs = import nixpkgs { config = {}; };
-  pythonCore = pkgs.python38;
+    rev = "b8697e57f10292a6165a20f03d2f42920dfaf973"; # 4-03-2024
+    # obtain via `git ls-remote https://github.com/nixos/nixpkgs nixos-unstable`
+  }) { config = {}; };
+  pythonCore = pkgs.python311;
   pythonPkgs = python-packages: with python-packages; [
       google_api_python_client
       google-auth-oauthlib
