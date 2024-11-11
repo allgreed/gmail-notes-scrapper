@@ -66,17 +66,30 @@ def main():
         ble = base64.urlsafe_b64decode(content.encode('ascii')).decode('utf-8')
 
         import html
+        import html.parser
         def parse_note_body(note_body) -> str:
-            # '&lt;' -> '<'
-            return html.unescape(note_body)
+            arr = []
+            class MyHTMLParser(html.parser.HTMLParser):
+                def __init__(self, *args, **kwargs):
+                    self.ble = False
+                    super().__init__(*args, **kwargs)
 
-            # there's inner div
-            # there's br
-            
-            # import re
-            # fuj = re.sub(r'<.*?>', '', note_body)
-            # argh = fuj.rstrip()
-            # return argh
+                def handle_starttag(self, tag, _):
+                    # the br tags are often not closed, nor self-closed
+                    if tag in {"body", "div", "br"}:
+                        self.ble = True
+                    else:
+                        self.ble = False
+
+                def handle_data(self, data):
+                    if self.ble:
+                        arr.append(data.replace("\r\n", ""))
+
+            parser = MyHTMLParser()
+            parser.feed(note_body)
+
+            kek = filter(len, arr)
+            return "\n".join(kek) + "\n"
 
         # TODO: I only need to translant this actually
         # also: refactoring ble -> content would be nice, but one thing at a time

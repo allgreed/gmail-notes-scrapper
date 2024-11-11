@@ -65,11 +65,33 @@ def main():
         content = r["payload"]["body"]["data"] 
         ble = base64.urlsafe_b64decode(content.encode('ascii')).decode('utf-8')
 
-        import re
-        fuj = re.sub(r'<.*?>', '', ble)
-        argh = fuj.rstrip()
+        import html
+        import html.parser
+        def parse_note_body(note_body) -> str:
+            arr = []
+            class MyHTMLParser(html.parser.HTMLParser):
+                def __init__(self, *args, **kwargs):
+                    self.ble = False
+                    super().__init__(*args, **kwargs)
 
-        print(argh)
+                def handle_starttag(self, tag, _):
+                    # the br tags are often not closed, nor self-closed
+                    if tag in {"body", "div", "br"}:
+                        self.ble = True
+                    else:
+                        self.ble = False
+
+                def handle_data(self, data):
+                    if self.ble:
+                        arr.append(data.replace("\r\n", ""))
+
+            parser = MyHTMLParser()
+            parser.feed(note_body)
+
+            kek = filter(len, arr)
+            return "\n".join(kek) + "\n"
+
+        print(parse_note_body(ble))
     print("+1")
     print('cd ~/Desktop/ogar-metric-exporter; nix-shell --command "make report"')
     # TODO: actually just run the systemd service?
