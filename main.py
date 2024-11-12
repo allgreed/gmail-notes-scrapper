@@ -89,7 +89,7 @@ def main():
             parser.feed(note_body)
 
             kek = list(filter(len, arr))
-            return "\n".join(kek) + "\n" if len(kek) > 1 else ""
+            return "\n".join(kek) + ("\n" if len(kek) > 1 else "")
 
         print(parse_note_body(ble))
     print("+1")
