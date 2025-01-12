@@ -98,8 +98,9 @@ def main():
 
     with open('cutoff', 'w') as f:
         f.write("{}\n".format(latest))
-    with open('cutoff.bak', 'w') as f:
-        f.write("{}\n".format(cutoff))
+    if cutoff != latest:  # prevents losing a backup
+        with open('cutoff.bak', 'w') as f:
+            f.write("{}\n".format(cutoff))
 
 # TODO: unfuck
 # TODO: Refactor as a module
