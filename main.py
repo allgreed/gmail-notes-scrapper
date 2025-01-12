@@ -1,5 +1,7 @@
 import pickle
 import os
+import html
+import html.parser
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -58,38 +60,13 @@ def main():
 
         # handle missing cutoff
         if i == DEFAULT_NOTES_WHEN_MISSING_CUTOFF and cutoff is None:
+            print("ragadżaga!!!!!")
             break
 
         r = service.users().messages().get(userId="me", id=a['id']).execute()
         import base64
         content = r["payload"]["body"]["data"] 
         ble = base64.urlsafe_b64decode(content.encode('ascii')).decode('utf-8')
-
-        import html
-        import html.parser
-        def parse_note_body(note_body) -> str:
-            arr = []
-            class MyHTMLParser(html.parser.HTMLParser):
-                def __init__(self, *args, **kwargs):
-                    self.ble = False
-                    super().__init__(*args, **kwargs)
-
-                def handle_starttag(self, tag, _):
-                    # the br tags are often not closed, nor self-closed
-                    if tag in {"body", "div", "br"}:
-                        self.ble = True
-                    else:
-                        self.ble = False
-
-                def handle_data(self, data):
-                    if self.ble:
-                        arr.append(data.replace("\r\n", ""))
-
-            parser = MyHTMLParser()
-            parser.feed(note_body)
-
-            kek = list(filter(len, arr))
-            return "\n".join(kek) + ("\n" if len(kek) > 1 else "")
 
         print(parse_note_body(ble))
     print("+1")
@@ -109,6 +86,32 @@ def main():
 # TODO: Don't 'move' to next note util the output is flushed to stdout
 
 # TODO: Document usage - how to obtain secrets, etc. <- is this needed?
+
+
+def parse_note_body(note_body) -> str:
+    arr = []
+    class MyHTMLParser(html.parser.HTMLParser):
+        def __init__(self, *args, **kwargs):
+            self.ble = False
+            super().__init__(*args, **kwargs)
+
+        def handle_starttag(self, tag, _):
+            # the br tags are often not closed, nor self-closed
+            if tag in {"body", "div", "br", "a"}:
+                self.ble = True
+            else:
+                self.ble = False
+
+        def handle_data(self, data):
+            if self.ble:
+                arr.append(data.replace("\r\n", ""))
+
+    parser = MyHTMLParser()
+    parser.feed(note_body)
+
+    kek = list(filter(len, arr))
+    return "\n".join(kek) + ("\n" if len(kek) > 1 else "")
+
 
 if __name__ == '__main__':
     main()

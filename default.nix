@@ -9,31 +9,20 @@ let
   pythonPkgs = python-packages: with python-packages; [
       google_api_python_client
       google-auth-oauthlib
+
+      pytest
     ]; 
   myPython = pythonCore.withPackages pythonPkgs;
 in
-pkgs.stdenv.mkDerivation rec {
-  name = "gmail-notes-scrapper";
-  src = ./.;
-
-  installPhase = ''
-    runHook preInstall
-    
-    mkdir -p $out/${myPython.sitePackages}
-    cp -r . $out/${myPython.sitePackages}/${name}
-
-    runHook postInstall
-  '';
-
-  propagatedbuildInputs =
-    with pkgs;
-    [
+{
+  shell = pkgs.mkShellNoCC {
+    buildInputs = with pkgs; [
       git
       gnumake
-      # this is only for the shell
-
       myPython
-      # this is a requirement
+      pyright
+      ruff
+      ruff-lsp
     ];
-  buildInputs = propagatedbuildInputs;
+  };
 }

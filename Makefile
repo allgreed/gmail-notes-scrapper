@@ -2,10 +2,13 @@
 
 # Porcelain
 # ###############
-.PHONY: run 
+.PHONY: run test
 
 run: setup ## run the app
 	./run
+
+test: setup
+	python -m pytest
 
 # Plumbing
 # ###############
