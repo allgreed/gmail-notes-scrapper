@@ -89,6 +89,7 @@ def main():
 
 
 def parse_note_body(note_body) -> str:
+    # print(note_body)
     arr = []
     class MyHTMLParser(html.parser.HTMLParser):
         def __init__(self, *args, **kwargs):
