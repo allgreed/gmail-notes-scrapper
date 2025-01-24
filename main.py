@@ -98,20 +98,27 @@ def parse_note_body(note_body) -> str:
 
         def handle_starttag(self, tag, _):
             # the br tags are often not closed, nor self-closed
-            if tag in {"body", "div", "br", "a"}:
+            if tag in {"div", "br"}:
                 self.ble = True
+                self.newline = True
+            elif tag in {"a", "body"}:
+                self.ble = True
+                self.newline = False
             else:
                 self.ble = False
+                self.newline = False
 
         def handle_data(self, data):
             if self.ble:
-                arr.append(data.replace("\r\n", ""))
+                arr.append(data.replace("\r\n", "").replace("\xa0", " "))
+            if self.newline:
+                arr.append("\n")
 
     parser = MyHTMLParser()
     parser.feed(note_body)
 
     kek = list(filter(len, arr))
-    return "\n".join(kek) + ("\n" if len(kek) > 1 else "")
+    return "".join(kek) + ("\n" if len(kek) > 1 and "\n" in kek else "")
 
 
 if __name__ == '__main__':
