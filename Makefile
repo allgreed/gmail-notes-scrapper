@@ -10,6 +10,10 @@ run: setup ## run the app
 test: setup
 	python -m pytest
 
+rerun:
+	cp cutoff.bak cutoff
+	python main.py 
+
 # Plumbing
 # ###############
 .PHONY: setup
