@@ -94,6 +94,7 @@ def parse_note_body(note_body) -> str:
     class MyHTMLParser(html.parser.HTMLParser):
         def __init__(self, *args, **kwargs):
             self.ble = False
+            self.newline = False
             super().__init__(*args, **kwargs)
 
         def handle_starttag(self, tag, _):
