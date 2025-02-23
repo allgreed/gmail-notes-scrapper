@@ -16,7 +16,7 @@ let
 in
 {
   shell = pkgs.mkShellNoCC {
-    buildInputs = with pkgs; [
+    packages = with pkgs; [
       git
       gnumake
       myPython
