@@ -11,6 +11,8 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 DEFAULT_NOTES_WHEN_MISSING_CUTOFF = 30
 
+DEBUG = False
+
 
 def main():
     creds = None
@@ -69,15 +71,18 @@ def main():
         ble = base64.urlsafe_b64decode(content.encode('ascii')).decode('utf-8')
 
         print(parse_note_body(ble))
+        if DEBUG:
+            print("orig", ble)
     print("+1")
     print('cd ~/Desktop/ogar-metric-exporter; nix-shell --command "make report"')
     # TODO: actually just run the systemd service?
 
-    with open('cutoff', 'w') as f:
-        f.write("{}\n".format(latest))
-    if cutoff != latest:  # prevents losing a backup
-        with open('cutoff.bak', 'w') as f:
-            f.write("{}\n".format(cutoff))
+    if not DEBUG:
+        with open('cutoff', 'w') as f:
+            f.write("{}\n".format(latest))
+        if cutoff != latest:  # prevents losing a backup
+            with open('cutoff.bak', 'w') as f:
+                f.write("{}\n".format(cutoff))
 
 # TODO: unfuck
 # TODO: Refactor as a module
