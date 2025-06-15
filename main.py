@@ -107,7 +107,7 @@ def parse_note_body(note_body) -> str:
             if tag in {"div", "br"}:
                 self.ble = True
                 self.newline = True
-            elif tag in {"a", "body"}:
+            elif tag in {"a", "body", "span"}:
                 self.ble = True
                 self.newline = False
             else:
